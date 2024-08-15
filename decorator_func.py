@@ -1,4 +1,5 @@
 #! /usr/bin/python3
+# Python Program to demontrate of decorator
 import time
 
 def timer(func):
