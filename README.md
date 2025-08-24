@@ -1,6 +1,7 @@
 # Postgresql_Data_Wrangling
+![Screenshot of a project interface](postgresql_data_wrangling.png)
 # *Overview*
-Project repo to demonstrate Data Wrangling in PostgreSQL, process start with importing Data Source JSON file into PostgreSQL, Data Observation using Jupyterlab by checking duplication, missing value, inconsistent data type. Data Cleaning refer to Data Observation & Finally Geneate Business Insight for Data Analytics or Data Science.
+Project repo to demonstrate Data Wrangling in PostgreSQL, process start with importing Data Source JSON file into PostgreSQL, Data Observation using Jupyterlab by checking duplication, missing value, inconsistent data type. Data Cleaning refer to Data Observation & Finally Generate Business Insight for Data Analytics or Data Science.
 # *Prererquisites*
 To follow along this project neeb to be available on your system:
 - Python3 with psycopgy2, jupyterlab
@@ -42,6 +43,7 @@ To follow along this project neeb to be available on your system:
    # Commit the changes and close the connection
    conn.commit()
    ```
+   ![PostgreSQL Screenshot](postgresql_screenshot.png)
 4. Data observation
    ```python3
    import pandas as pd
