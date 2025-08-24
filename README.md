@@ -59,14 +59,14 @@ To follow along this project neeb to be available on your system:
        print("No duplicate found on order_id")
    # Checking null value
    def check_for_none(cursor, table_name, column_name):
-     query = f"SELECT * FROM {table_name} WHERE {column_name} IS NULL;"
-     print(f"Executing {query}")
-     cursor.execute(query)
-     result = cursor.fetchall()
-     if result:
-        print(f"Found NULL on {column_name}")
-     else:
-        print(f"Not found NULL on {column_name}")
+       query = f"SELECT * FROM {table_name} WHERE {column_name} IS NULL;"
+       print(f"Executing {query}")
+       cursor.execute(query)
+       result = cursor.fetchall()
+       if result:
+          print(f"Found NULL on {column_name}")
+       else:
+          print(f"Not found NULL on {column_name}")
    ```
 9. Data cleaning
 10. Generate Business Insight
