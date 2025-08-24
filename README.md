@@ -23,7 +23,7 @@ To follow along this project neeb to be available on your system:
    import psycopg2
    from psycopg2 import extras
    ```
-3. Create postgreSQL connection
+2. Create postgreSQL connection
    ```python3
    conn = psycopg2.connect(
             dbname=DB_NAME,
@@ -34,7 +34,7 @@ To follow along this project neeb to be available on your system:
         )
    cur = conn.cursor()
    ```
-5. Import JSON file into postgresql
+3. Import JSON file into postgresql
    ```python3
    # Insert the record into the database
     cur.execute(insert_sql, record_values)
@@ -42,7 +42,7 @@ To follow along this project neeb to be available on your system:
    # Commit the changes and close the connection
    conn.commit()
    ```
-7. Data observation
+4. Data observation
    ```python3
    import pandas as pd
 
@@ -68,9 +68,86 @@ To follow along this project neeb to be available on your system:
        else:
           print(f"Not found NULL on {column_name}")
    ```
-9. Data cleaning
-10. Generate Business Insight
-11. CLose connindtion
+5. Data cleaning
+   ```python3
+   # Fillin Null value age with median value
+   median_age = ''' UPDATE records SET customer_age =(
+                SELECT percentile_cont(0.5) WITHIN GROUP (ORDER BY customer_age)
+                FROM records)
+                WHERE customer_age IS NULL;
+            '''
+   cur.execute(median_age)
+   # Commit the changes and close the connection
+   conn.commit()
+
+   # Update payment_method with Cash
+   payment_method = ''' UPDATE records SET payment_method = 'Cash'
+                    WHERE payment_method IS NULL;
+                '''
+   cur.execute(payment_method)
+   # Commit the changes and close the connection
+   conn.commit()
+
+   # Update notes column rename to special_handling
+   special_handling = ''' ALTER TABLE records RENAME COLUMN notes TO special_handling;
+                '''
+   cur.execute(special_handling)
+   # Commit the changes and close the connection
+   conn.commit()
+   ```
+6. Generate Business Insight
+   ```python3
+   # Best Selling Item
+   best_selling_item = ''' SELECT item_name, sum(total_price) FROM records
+                        GROUP BY item_name ORDER BY sum(total_price) DESC LIMIT 5;
+                    '''
+   cur.execute(best_selling_item)
+   best_selling_item_result = cur.fetchall()
+   best_selling_item_result
+   
+   # Sales Distribution By Age
+   sale_distribution_age = '''
+    SELECT
+        CASE
+            WHEN customer_age IS NULL THEN 'Other/Unknown'
+            WHEN (customer_age)::INT >= 0 AND (customer_age)::INT < 18 THEN '0-17'
+            WHEN (customer_age)::INT >= 18 AND (customer_age)::INT < 25 THEN '18-24'
+            WHEN (customer_age)::INT >= 25 AND (customer_age)::INT < 35 THEN '25-34'
+            WHEN (customer_age)::INT >= 35 AND (customer_age)::INT < 50 THEN '35-49'
+            WHEN (customer_age)::INT >= 50 AND (customer_age)::INT < 65 THEN '50-64'
+            WHEN (customer_age)::INT >= 65 AND (customer_age)::INT < 100 THEN '65-99'
+            ELSE 'Other/Unknown'
+        END AS age_group,
+        COUNT(*) AS total_price
+    FROM
+        records
+    GROUP BY
+        age_group
+    ORDER BY
+        age_group;
+    '''
+   cur.execute(sale_distribution_age)
+   sale_distribution_age_result = cur.fetchall()
+   sale_distribution_age_result
+   
+   # Sales Distribution By Region
+   sales_by_region = ''' SELECT region, sum(total_price) FROM records
+                    GROUP BY region ORDER BY sum(total_price) DESC;
+                '''
+   cur.execute(sales_by_region)
+   sales_by_region_result = cur.fetchall()
+   sales_by_region_result
+   
+   # Status Status Breakdown
+   status_query = ''' SELECT status, SUM(total_price) FROM records
+                GROUP BY status ORDER BY SUM(total_price) DESC;
+            '''
+   cur.execute(status_query)
+   status_query_result = cur.fetchall()
+   status_query_result
+   
+   ```
+7. CLose connindtion
    ```python3
    # Close cursor
    cur.close()
