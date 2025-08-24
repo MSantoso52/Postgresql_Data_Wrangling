@@ -149,7 +149,7 @@ To follow along this project neeb to be available on your system:
    status_query_result
    
    ```
-7. CLose connindtion
+7. CLose connection
    ```python3
    # Close cursor
    cur.close()
