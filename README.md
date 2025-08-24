@@ -18,3 +18,16 @@ To follow along this project neeb to be available on your system:
   sudo apt install vim
   ```
 # *Project Flow*
+1. Import necessary library
+2. Create postgreSQL connection
+3. Import JSON file into postgresql
+4. Data observation
+5. Data cleaning
+6. Generate Business Insight
+7. CLose connindtion
+   ```python3
+   # Close cursor
+   cur.close()
+   # Close connection
+   conn.close()
+   ```
